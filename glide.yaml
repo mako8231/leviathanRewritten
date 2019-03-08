@@ -1,0 +1,4 @@
+package: leviathanRewritten
+import:
+- package: github.com/PuerkitoBio/goquery
+- package: github.com/bwmarrin/discordgo

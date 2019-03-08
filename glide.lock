@@ -1,0 +1,24 @@
+hash: e92f3b8bf1e067c0610caf6116e5eb793070dea03f647bb6a54c7033c36684a1
+updated: 2018-11-13T15:06:46.614635708-03:00
+imports:
+- name: github.com/andybalholm/cascadia
+  version: 680b6a57bda4f657485ad44bdea42342ead737bc
+- name: github.com/bwmarrin/discordgo
+  version: 8325a6bf6dd6c91ed4040a1617b07287b8fb0eba
+- name: github.com/gorilla/websocket
+  version: 483fb8d7c32fcb4b5636cd293a92e3935932e2f4
+- name: github.com/PuerkitoBio/goquery
+  version: 2af3d16e2bb8c46efba31b0af1d7ca2eac7fcc23
+- name: golang.org/x/crypto
+  version: 3d3f9f413869b949e48070b5bc593aa22cc2b8f2
+  subpackages:
+  - internal/subtle
+  - nacl/secretbox
+  - poly1305
+  - salsa20/salsa
+- name: golang.org/x/net
+  version: 88d92db4c548972d942ac2a3531a8a9a34c82ca6
+  subpackages:
+  - html
+  - html/atom
+testImports: []
