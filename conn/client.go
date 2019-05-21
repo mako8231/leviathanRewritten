@@ -17,7 +17,7 @@ func StartClient(){
 	//Reading the configuration file...
 	config.LoadConfig()
 	//Starting session
-	s, err := discordgo.New("Bot "+config.Data.Token)
+	s, err := discordgo.New(config.Data.Token)
 	if err != nil{
 		log.Fatal(err.Error())
 	}
