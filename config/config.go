@@ -13,6 +13,8 @@ type Config struct {
 	Owner       string `json:"owner"`
 	DefaultPort string `json:"default_port"`
 	SafeMode    bool   `json:"safe_mode"`
+	Server      string `json:"server"`
+	PoolChan    string `json:"pool_chan"`
 }
 
 var (

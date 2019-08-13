@@ -41,4 +41,5 @@ func commandCaller(cmd *model.CmdModel, s *discordgo.Session, m *discordgo.Messa
 	if utils.Compare(cmd.CmdName, "d") {
 		modules.Dice(s, m, cmd.Args...)
 	}
+
 }

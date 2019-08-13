@@ -1,8 +1,10 @@
 {
-    "token" : "Insert token",
+    "token" : "Token here",
     "prefix" : ";",
     "owner" : "231831687955349504",
     "default_port" : "8080",
-    "safe_mode" : false
+    "safe_mode" : false,
+    "server" : "231829187776741377",
+    "pool_chan" : "525348077314375700"
 }
 
