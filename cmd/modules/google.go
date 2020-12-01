@@ -34,7 +34,17 @@ func Google(s *discordgo.Session, m *discordgo.Message, args ...string) {
 
 			substr := strings.SplitAfter(res[0].Link, "&sa")
 			final := strings.Replace(substr[0], "&sa", "", -1)
-			s.ChannelMessageSend(m.ChannelID, final)
+			sent_msg, err := s.ChannelMessageSend(m.ChannelID, final)
+
+			if err != nil {
+				// erro ao enviar mensagem
+				fmt.Println(err.Error())
+				return
+			}
+
+			// adicionar reacts na mensagem
+			s.MessageReactionAdd(m.ChannelID, sent_msg.ID, "◀️")
+			s.MessageReactionAdd(m.ChannelID, sent_msg.ID, "▶️")
 		} else {
 			msg := utils.NewEmbed()
 			msg.SetColor(utils.Yellow)
