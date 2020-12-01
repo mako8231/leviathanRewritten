@@ -8,7 +8,7 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
-type result struct {
+type Result struct {
 	Title string
 	Link  string
 }
@@ -17,7 +17,7 @@ type result struct {
 const GOOGLESEARCH = "https://www.google.com.br/search?q="
 const LANG = "pt"
 
-func GoogleParse(query string, cType bool) ([]result, error) {
+func GoogleParse(query string, cType bool) ([]Result, error) {
 	var securityType string
 
 	if !cType && config.Data.SafeMode {
@@ -26,7 +26,7 @@ func GoogleParse(query string, cType bool) ([]result, error) {
 		securityType = ""
 	}
 
-	results := []result{}
+	results := []Result{}
 	resp, err := GetResponse(GOOGLESEARCH + Encode(query) + "&hl=" + Encode(LANG) + securityType)
 	if err != nil {
 		return nil, err
@@ -47,7 +47,7 @@ func GoogleParse(query string, cType bool) ([]result, error) {
 		title := titleTag.Text()
 
 		if link != "" && link != "#" && !strings.HasPrefix(link, "/") {
-			result := result{
+			result := Result{
 				title,
 				link,
 			}

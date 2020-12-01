@@ -8,6 +8,9 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
+var last_results []utils.Result // guardar os resultados obtidos anteriormente
+var last_msg_author_id string   // lembrar quem que pesquisou anteriormente
+
 func Google(s *discordgo.Session, m *discordgo.Message, args ...string) {
 	if len(args) > 0 {
 		query := utils.ArgsTag(args)
@@ -26,6 +29,9 @@ func Google(s *discordgo.Session, m *discordgo.Message, args ...string) {
 
 		//remove bad args
 		if len(res) > 0 {
+			last_results = res
+			last_msg_author_id = m.Author.ID
+
 			substr := strings.SplitAfter(res[0].Link, "&sa")
 			final := strings.Replace(substr[0], "&sa", "", -1)
 			s.ChannelMessageSend(m.ChannelID, final)
