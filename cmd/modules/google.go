@@ -26,6 +26,13 @@ func EventGoogleMessageReaction(s *discordgo.Session, botMessage *discordgo.Mess
 		return
 	}
 
+	// remover react da pessoa para que ela possa reagir novamente
+	err := s.MessageReactionRemove(botMessage.ChannelID, botMessage.ID, r.Emoji.Name, r.UserID)
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
 	if r.Emoji.Name == "◀️" && results_index > 0 {
 		results_index = results_index - 1
 	} else if r.Emoji.Name == "▶️" && results_index < len(last_results)-1 {
@@ -36,13 +43,6 @@ func EventGoogleMessageReaction(s *discordgo.Session, botMessage *discordgo.Mess
 
 	substr := strings.SplitAfter(last_results[results_index].Link, "&sa")
 	link := strings.Replace(substr[0], "&sa", "", -1)
-
-	// remover react da pessoa para que ela possa reagir novamente
-	err := s.MessageReactionRemove(botMessage.ChannelID, botMessage.ID, r.Emoji.Name, r.UserID)
-
-	if err != nil {
-		fmt.Println(err)
-	}
 
 	s.ChannelMessageEdit(botMessage.ChannelID, botMessage.ID, strconv.Itoa(results_index+1)+"/"+strconv.Itoa(len(last_results))+" "+link)
 }
