@@ -13,6 +13,7 @@ var last_results []utils.Result // guardar os resultados obtidos anteriormente
 var results_index int           // variável de controle de paginação
 var last_msg_author_id string   // lembrar quem que pesquisou anteriormente
 var last_google_msg_id string   // lembrar qual foi a mensagem mais recente do ;g
+var last_query_channel_id string
 
 // EventGoogleMessageReaction é executado quando há uma reação na mensagem do comando de Google.
 func EventGoogleMessageReaction(s *discordgo.Session, botMessage *discordgo.Message, r *discordgo.MessageReaction) {
@@ -65,8 +66,14 @@ func Google(s *discordgo.Session, m *discordgo.Message, args ...string) {
 
 		//remove bad args
 		if len(res) > 0 {
+			if len(last_results) > 0 {
+				// colocar um react na pesquisa anterior dizendo que está expirada
+				s.MessageReactionAdd(last_query_channel_id, last_google_msg_id, "🕥")
+			}
+
 			last_results = res
 			last_msg_author_id = m.Author.ID
+			last_query_channel_id = m.ChannelID
 			results_index = 0
 
 			substr := strings.SplitAfter(res[0].Link, "&sa")
