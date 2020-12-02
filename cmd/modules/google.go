@@ -44,7 +44,7 @@ func EventGoogleMessageReaction(s *discordgo.Session, botMessage *discordgo.Mess
 		fmt.Println(err)
 	}
 
-	s.ChannelMessageEdit(botMessage.ChannelID, botMessage.ID, "Resultado #"+strconv.Itoa(results_index+1)+" "+link)
+	s.ChannelMessageEdit(botMessage.ChannelID, botMessage.ID, strconv.Itoa(results_index+1)+"/"+strconv.Itoa(len(last_results))+" "+link)
 }
 
 func Google(s *discordgo.Session, m *discordgo.Message, args ...string) {
@@ -71,7 +71,7 @@ func Google(s *discordgo.Session, m *discordgo.Message, args ...string) {
 
 			substr := strings.SplitAfter(res[0].Link, "&sa")
 			final := strings.Replace(substr[0], "&sa", "", -1)
-			sent_msg, err := s.ChannelMessageSend(m.ChannelID, "Resultado #"+strconv.Itoa(results_index+1)+" "+final)
+			sent_msg, err := s.ChannelMessageSend(m.ChannelID, strconv.Itoa(results_index+1)+"/"+strconv.Itoa(len(res))+" "+final)
 
 			if err != nil {
 				// erro ao enviar mensagem
