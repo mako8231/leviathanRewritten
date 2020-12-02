@@ -36,6 +36,7 @@ func StartClient() {
 	err = Session.Open()
 
 	Session.AddHandler(handlers.MessageCreate)
+	Session.AddHandler(handlers.MessageReactionAdd)
 
 	if err != nil {
 		log.Fatal(err.Error())
