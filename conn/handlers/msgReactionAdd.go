@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"fmt"
+	"leviathanRewritten/cmd/modules"
 
 	"github.com/bwmarrin/discordgo"
 )
@@ -15,8 +16,15 @@ func MessageReactionAdd(s *discordgo.Session, reaction *discordgo.MessageReactio
 		return
 	}
 
-	// Ignores messages from bots
-	if m.Author.Bot {
+	currentUser, err := s.User("@me")
+	if err != nil {
+		// erro ao obter o usuário atual
+		return
+	}
+
+	// Somente executar se a mensagem reagida é nossa
+	if m.Author.ID == currentUser.ID {
+		modules.EventGoogleMessageReaction(s, m, reaction.MessageReaction)
 		return
 	}
 
