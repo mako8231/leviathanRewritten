@@ -1,6 +1,7 @@
 package conn
 
 import (
+	"leviathanRewritten/commands"
 	"leviathanRewritten/config"
 	"leviathanRewritten/conn/handlers"
 	"leviathanRewritten/httpServer"
@@ -38,10 +39,13 @@ func StartClient() {
 	Session.AddHandler(handlers.MessageCreate)
 	Session.AddHandler(handlers.MessageReactionAdd)
 
+	commands.RegisterCommands()
+
+	Session.UpdateStreamingStatus(0, config.Data.Prefix+"ajuda | v"+config.BotVersion, "https://www.twitch.tv/masao24")
+
 	if err != nil {
 		log.Fatal(err.Error())
 	}
 	log.Println(user.Username + " started")
 	httpServer.StartServer(config.Data.DefaultPort)
-
 }

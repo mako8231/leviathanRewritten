@@ -1,8 +1,7 @@
 package handlers
 
 import (
-	"fmt"
-	"leviathanRewritten/cmd"
+	"leviathanRewritten/commands"
 	"leviathanRewritten/config"
 	"leviathanRewritten/utils"
 	"strings"
@@ -31,12 +30,11 @@ func MessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if channel.Type == 0 {
 		//código merda ae vou melhorar quando eu achar que a leviathan será algo maior pra ficar na SA (não vai acontecer)
 		if m.ChannelID == config.Data.PoolChan && m.GuildID == config.Data.Server {
-			fmt.Print("Teste")
 			utils.Pool(s, m)
 		}
 
 		if strings.HasPrefix(m.Content, config.Data.Prefix) {
-			cmd.MessageController(m.Message, s)
+			commands.HandleCommand(s, m.Message)
 		}
 	}
 

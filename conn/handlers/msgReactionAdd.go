@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"fmt"
-	"leviathanRewritten/cmd/modules"
+	"leviathanRewritten/commands"
 
 	"github.com/bwmarrin/discordgo"
 )
@@ -24,7 +24,7 @@ func MessageReactionAdd(s *discordgo.Session, reaction *discordgo.MessageReactio
 
 	// Somente executar se a mensagem reagida é nossa
 	if m.Author.ID == currentUser.ID {
-		modules.EventGoogleMessageReaction(s, m, reaction.MessageReaction)
+		commands.EventGoogleMessageReaction(s, m, reaction.MessageReaction)
 		return
 	}
 

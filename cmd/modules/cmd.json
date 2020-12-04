@@ -1,7 +1,0 @@
-{
-    "commands" : [
-        {"name" : "help",  "description": "Show this message"},
-        {"name": "avatar", "description": "Get the avatar url"}
-    
-    ]
-}
