@@ -48,7 +48,7 @@ func EventGoogleMessageReaction(s *discordgo.Session, botMessage *discordgo.Mess
 	s.ChannelMessageEdit(botMessage.ChannelID, botMessage.ID, strconv.Itoa(results_index+1)+"/"+strconv.Itoa(len(last_results))+" "+link)
 }
 
-func Google(s *discordgo.Session, m *discordgo.Message, args ...string) {
+func CommandGoogleExec(s *discordgo.Session, m *discordgo.Message, args ...string) {
 	if len(args) > 0 {
 		query := utils.ArgsTag(args)
 		channel, err := s.Channel(m.ChannelID)

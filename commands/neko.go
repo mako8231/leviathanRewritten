@@ -9,7 +9,7 @@ import (
 
 var url = "https://nekos.life/api/v2/img/"
 
-func Neko(s *discordgo.Session, m *discordgo.Message, args ...string) {
+func CommandNekoExec(s *discordgo.Session, m *discordgo.Message, args ...string) {
 	//First, instance a channel struct
 	var finalURL string
 	var color int

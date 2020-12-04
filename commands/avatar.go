@@ -6,8 +6,8 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-//Avatar Get the user avatar
-func Avatar(s *discordgo.Session, m *discordgo.Message, args ...string) {
+// CommandAvatar Get the user avatar
+func CommandAvatarExec(s *discordgo.Session, m *discordgo.Message, args ...string) {
 	var username string
 	var avatarurl string
 	text := "'s avatar"

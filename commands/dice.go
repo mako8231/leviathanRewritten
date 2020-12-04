@@ -7,7 +7,7 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-func Dice(s *discordgo.Session, m *discordgo.Message, args ...string) {
+func CommandDiceExec(s *discordgo.Session, m *discordgo.Message, args ...string) {
 	if len(args) == 0 {
 		return
 	}

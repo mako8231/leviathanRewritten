@@ -1,6 +1,7 @@
 package conn
 
 import (
+	"leviathanRewritten/commands"
 	"leviathanRewritten/config"
 	"leviathanRewritten/conn/handlers"
 	"leviathanRewritten/httpServer"
@@ -38,10 +39,11 @@ func StartClient() {
 	Session.AddHandler(handlers.MessageCreate)
 	Session.AddHandler(handlers.MessageReactionAdd)
 
+	commands.RegisterCommands()
+
 	if err != nil {
 		log.Fatal(err.Error())
 	}
 	log.Println(user.Username + " started")
 	httpServer.StartServer(config.Data.DefaultPort)
-
 }
