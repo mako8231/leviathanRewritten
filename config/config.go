@@ -18,7 +18,8 @@ type Config struct {
 }
 
 var (
-	Data *Config
+	Data       *Config
+	BotVersion string
 )
 
 func LoadConfig() {
@@ -39,4 +40,5 @@ func LoadConfig() {
 		Data.DefaultPort = port
 	}
 
+	BotVersion = "1.1"
 }

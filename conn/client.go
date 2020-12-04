@@ -41,6 +41,8 @@ func StartClient() {
 
 	commands.RegisterCommands()
 
+	Session.UpdateStreamingStatus(0, config.Data.Prefix+"ajuda | v"+config.BotVersion, "https://www.twitch.tv/masao24")
+
 	if err != nil {
 		log.Fatal(err.Error())
 	}
