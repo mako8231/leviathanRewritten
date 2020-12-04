@@ -65,7 +65,15 @@ func RegisterCommands() {
 		description: "Mostra uma neko",
 		usage:       "neko [ lewd ]",
 		aliases:     []string{},
-		exec:        CommandGoogleExec,
+		exec:        CommandNekoExec,
+	})
+
+	register(Command{
+		name:        "ajuda",
+		description: "Mostra os comandos disponíveis",
+		usage:       "ajuda",
+		aliases:     []string{"help", "?"},
+		exec:        CommandAjudaExec,
 	})
 }
 
@@ -80,7 +88,7 @@ func HandleCommand(s *discordgo.Session, m *discordgo.Message) {
 	cmdName := strings.ToLower(strings.TrimPrefix(args[0], config.Data.Prefix))
 
 	// remover nome de comando da lista de parâmetros
-	args = args[:1]
+	args = args[1:]
 
 	// procurar por aliases
 	if realName, aliasExists := Aliases[cmdName]; aliasExists {
