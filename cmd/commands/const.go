@@ -1,4 +1,4 @@
-package modules
+package commands
 
 import (
 	"encoding/json"
@@ -6,12 +6,12 @@ import (
 	"log"
 )
 
-type commands struct{
-	List []list `json:"commands"` 
+type commands struct {
+	List []list `json:"commands"`
 }
 
-type list struct{
-	Name string `json:"name"`
+type list struct {
+	Name        string `json:"name"`
 	Description string `json:"description"`
 }
 
@@ -19,17 +19,16 @@ var (
 	CommandList = loadList()
 )
 
-
-func loadList() *commands{
+func loadList() *commands {
 	var com *commands
 	b, err := ioutil.ReadFile("cmd/modules/cmd.json")
-	if err != nil{
+	if err != nil {
 		log.Println(err.Error())
 		return nil
 	}
 
 	err = json.Unmarshal(b, &com)
-	if err != nil{
+	if err != nil {
 		log.Println(err.Error())
 		return nil
 	}
