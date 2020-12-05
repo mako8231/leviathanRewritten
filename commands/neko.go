@@ -7,9 +7,9 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-var url = "https://nekos.life/api/v2/img/"
-
 func CommandNekoExec(s *discordgo.Session, m *discordgo.Message, args ...string) {
+	var url = "https://nekos.life/api/v2/img/"
+
 	//First, instance a channel struct
 	var finalURL string
 	var color int
