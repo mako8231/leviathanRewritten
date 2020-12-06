@@ -75,6 +75,22 @@ func RegisterCommands() {
 		aliases:     []string{"help", "?"},
 		exec:        CommandAjudaExec,
 	})
+
+	register(Command{
+		name:        "calc",
+		description: "Resolve uma expressão aritmética",
+		usage:       "calc < expressão >",
+		aliases:     []string{"c", "=", "+"},
+		exec:        CommandCalcExec,
+	})
+
+	register(Command{
+		name:        "ping",
+		description: "🏓",
+		usage:       "ping",
+		aliases:     []string{},
+		exec:        CommandPingExec,
+	})
 }
 
 // HandleCommand faz o parsing das mensagens e a execução dos comandos

@@ -15,6 +15,11 @@ func CommandAjudaExec(s *discordgo.Session, m *discordgo.Message, args ...string
 	e.SetColor(0x36393F) // cor background do Discord, dá uma aparência legal
 
 	for _, cmd := range Commands {
+		// discriminação contra o comando ping: ele não aparece na lista
+		if cmd.name == "ping" {
+			continue
+		}
+
 		cmdName := cmd.name
 
 		// incluir aliases no nome
