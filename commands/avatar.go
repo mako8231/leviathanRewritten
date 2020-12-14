@@ -31,7 +31,7 @@ func CommandAvatarExec(s *discordgo.Session, m *discordgo.Message, args ...strin
 
 	//Creating embed message
 	e := utils.NewEmbed()
-	e.SetColor(utils.Blue)
+	e.SetColor(0x36393F)
 	e.SetTitle("🌟 " + user.Username)
 	e.SetImage(user.AvatarURL("1024"))
 	e.SetFooter("ID " + user.ID)
