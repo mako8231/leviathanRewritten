@@ -2,6 +2,7 @@ package commands
 
 import (
 	"leviathanRewritten/config"
+	"leviathanRewritten/utils"
 	"strings"
 
 	"github.com/bwmarrin/discordgo"
@@ -105,6 +106,11 @@ func HandleCommand(s *discordgo.Session, m *discordgo.Message) {
 
 	// remover nome de comando da lista de parâmetros
 	args = args[1:]
+
+	// remover parâmetros vazios ("")
+	args = utils.FilterSliceString(args, func(element string) bool {
+		return element != ""
+	})
 
 	// procurar por aliases
 	if realName, aliasExists := Aliases[cmdName]; aliasExists {
