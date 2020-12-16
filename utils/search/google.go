@@ -1,23 +1,19 @@
-package utils
+package search
 
 import (
 	"strings"
 
 	"leviathanRewritten/config"
+	"leviathanRewritten/utils"
 
 	"github.com/PuerkitoBio/goquery"
 )
-
-type Result struct {
-	Title string
-	Link  string
-}
 
 //GOOGLESEARCH google search base url
 const GOOGLESEARCH = "https://www.google.com.br/search?q="
 const LANG = "pt"
 
-func GoogleParse(query string, cType bool) ([]Result, error) {
+func SearchGoogle(query string, cType bool) ([]Result, error) {
 	var securityType string
 
 	if !cType && config.Data.SafeMode {
@@ -27,7 +23,7 @@ func GoogleParse(query string, cType bool) ([]Result, error) {
 	}
 
 	results := []Result{}
-	resp, err := GetResponse(GOOGLESEARCH + Encode(query) + "&hl=" + Encode(LANG) + securityType)
+	resp, err := utils.GetResponse(GOOGLESEARCH + utils.Encode(query) + "&hl=" + utils.Encode(LANG) + securityType)
 	if err != nil {
 		return nil, err
 	}
