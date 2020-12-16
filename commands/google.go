@@ -3,17 +3,19 @@ package commands
 import (
 	"fmt"
 	"leviathanRewritten/utils"
+	"leviathanRewritten/utils/search"
 	"strconv"
 	"strings"
 
 	"github.com/bwmarrin/discordgo"
 )
 
-var last_results []utils.Result // guardar os resultados obtidos anteriormente
-var results_index int           // variável de controle de paginação
-var last_msg_author_id string   // lembrar quem que pesquisou anteriormente
-var last_google_msg_id string   // lembrar qual foi a mensagem mais recente do ;g
+var last_results []search.Result // guardar os resultados obtidos anteriormente
+var results_index int            // variável de controle de paginação
+var last_msg_author_id string    // lembrar quem que pesquisou anteriormente
+var last_google_msg_id string    // lembrar qual foi a mensagem mais recente do ;g
 var last_query_channel_id string
+var last_query_provider string // lembrar se a última pesquisa utilizou Google ou Bing
 
 // EventGoogleMessageReaction é executado quando há uma reação na mensagem do comando de Google.
 func EventGoogleMessageReaction(s *discordgo.Session, botMessage *discordgo.Message, r *discordgo.MessageReaction) {
@@ -44,8 +46,13 @@ func EventGoogleMessageReaction(s *discordgo.Session, botMessage *discordgo.Mess
 
 	substr := strings.SplitAfter(last_results[results_index].Link, "&sa")
 	link := strings.Replace(substr[0], "&sa", "", -1)
+	final := strconv.Itoa(results_index+1) + "/" + strconv.Itoa(len(last_results)) + " " + link
 
-	s.ChannelMessageEdit(botMessage.ChannelID, botMessage.ID, strconv.Itoa(results_index+1)+"/"+strconv.Itoa(len(last_results))+" "+link)
+	if last_query_provider == "bing" {
+		final = final + " (Bing)"
+	}
+
+	s.ChannelMessageEdit(botMessage.ChannelID, botMessage.ID, final)
 }
 
 func CommandGoogleExec(s *discordgo.Session, m *discordgo.Message, args ...string) {
@@ -58,7 +65,7 @@ func CommandGoogleExec(s *discordgo.Session, m *discordgo.Message, args ...strin
 
 		query = strings.Replace(query, "_", "%20", -1)
 
-		res, err := utils.GoogleParse(query, channel.NSFW)
+		res, provider, err := search.Search(query, channel.NSFW)
 		if err != nil {
 			fmt.Println(err.Error())
 			return
@@ -75,10 +82,17 @@ func CommandGoogleExec(s *discordgo.Session, m *discordgo.Message, args ...strin
 			last_msg_author_id = m.Author.ID
 			last_query_channel_id = m.ChannelID
 			results_index = 0
+			last_query_provider = provider
 
 			substr := strings.SplitAfter(res[0].Link, "&sa")
 			final := strings.Replace(substr[0], "&sa", "", -1)
-			sent_msg, err := s.ChannelMessageSend(m.ChannelID, strconv.Itoa(results_index+1)+"/"+strconv.Itoa(len(res))+" "+final)
+			final = strconv.Itoa(results_index+1) + "/" + strconv.Itoa(len(res)) + " " + final
+
+			if provider == "bing" {
+				final = final + " (Bing)"
+			}
+
+			sent_msg, err := s.ChannelMessageSend(m.ChannelID, final)
 
 			if err != nil {
 				// erro ao enviar mensagem
