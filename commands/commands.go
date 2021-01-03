@@ -39,16 +39,16 @@ func RegisterCommands() {
 	// registrar cada comando individualmente
 	register(Command{
 		name:        "avatar",
-		description: "Mostra o avatar de alguém (ou o seu)",
-		usage:       "avatar [ @usuário ]",
+		description: "Mostra o avatar de alguém",
+		usage:       "avatar @usuário",
 		aliases:     []string{},
 		exec:        CommandAvatarExec,
 	})
 
 	register(Command{
 		name:        "dice",
-		description: "Gera um número aleatório entre 1 e N",
-		usage:       "dice < N >",
+		description: "Gera um número aleatório",
+		usage:       "dice 12",
 		aliases:     []string{"d"},
 		exec:        CommandDiceExec,
 	})
@@ -56,7 +56,7 @@ func RegisterCommands() {
 	register(Command{
 		name:        "google",
 		description: "Realiza uma pesquisa no Google",
-		usage:       "google < pesquisa >",
+		usage:       "google termos",
 		aliases:     []string{"g"},
 		exec:        CommandGoogleExec,
 	})
@@ -64,7 +64,7 @@ func RegisterCommands() {
 	register(Command{
 		name:        "neko",
 		description: "Mostra uma neko",
-		usage:       "neko [ lewd ]",
+		usage:       "neko lewd?",
 		aliases:     []string{},
 		exec:        CommandNekoExec,
 	})
@@ -80,7 +80,7 @@ func RegisterCommands() {
 	register(Command{
 		name:        "calc",
 		description: "Resolve uma expressão aritmética",
-		usage:       "calc < expressão >",
+		usage:       "calc 2 + 2",
 		aliases:     []string{"c", "=", "+"},
 		exec:        CommandCalcExec,
 	})
