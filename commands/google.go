@@ -12,10 +12,24 @@ import (
 
 var last_results []search.Result // guardar os resultados obtidos anteriormente
 var results_index int            // variável de controle de paginação
-var last_msg_author_id string    // lembrar quem que pesquisou anteriormente
-var last_google_msg_id string    // lembrar qual foi a mensagem mais recente do ;g
+
 var last_query_channel_id string
 var last_query_provider string // lembrar se a última pesquisa utilizou Google ou Bing
+
+var last_msg_author_id string         // lembrar quem que pesquisou anteriormente
+var last_google_msg_id string         // lembrar qual foi a mensagem que contém os resultados
+var last_google_command_msg_id string // lembrar qual a mensagem que contém o comando ";g" e seus argumentos
+
+// EventGoogleMessageEdit é executado quando uma mensagem com ;g for editada por seu autor
+func EventGoogleMessageEdit(s *discordgo.Session, usrMsg *discordgo.Message) {
+	if usrMsg.ID != last_google_command_msg_id {
+		// não executar se a mensagem editada não for a que tem o ;g
+		return
+	}
+
+	s.ChannelMessageDelete(usrMsg.ChannelID, last_google_msg_id) // apagar a mensagem anterior após re-executar o comando
+	HandleCommand(s, usrMsg)
+}
 
 // EventGoogleMessageReaction é executado quando há uma reação na mensagem do comando de Google.
 func EventGoogleMessageReaction(s *discordgo.Session, botMessage *discordgo.Message, r *discordgo.MessageReaction) {
@@ -34,6 +48,7 @@ func EventGoogleMessageReaction(s *discordgo.Session, botMessage *discordgo.Mess
 
 	if err != nil {
 		fmt.Println(err)
+		return
 	}
 
 	if r.Emoji.Name == "◀️" && results_index > 0 {
@@ -75,7 +90,7 @@ func CommandGoogleExec(s *discordgo.Session, m *discordgo.Message, args ...strin
 		if len(res) > 0 {
 			if len(last_results) > 0 {
 				// colocar um react na pesquisa anterior dizendo que está expirada
-				s.MessageReactionAdd(last_query_channel_id, last_google_msg_id, "🕥")
+				// s.MessageReactionAdd(last_query_channel_id, last_google_msg_id, "🕥")
 			}
 
 			last_results = res
@@ -101,6 +116,7 @@ func CommandGoogleExec(s *discordgo.Session, m *discordgo.Message, args ...strin
 			}
 
 			last_google_msg_id = sent_msg.ID
+			last_google_command_msg_id = m.ID
 
 			// adicionar reacts na mensagem
 			s.MessageReactionAdd(m.ChannelID, sent_msg.ID, "◀️")
