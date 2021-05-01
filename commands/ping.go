@@ -6,6 +6,7 @@ import (
 
 // CommandPingExec implementa o comando ping... grande comando
 func CommandPingExec(s *discordgo.Session, m *discordgo.Message, args ...string) {
-	s.ChannelMessageSend(m.ChannelID, "\\🏓")
-	return
+	sent, _ := s.ChannelMessageSend(m.ChannelID, "\\🏓")
+	lastCommandOutputMsgChannelID = sent.ChannelID
+	lastCommandOutputMsgID = sent.ID
 }

@@ -40,5 +40,5 @@ func LoadConfig() {
 		Data.DefaultPort = port
 	}
 
-	BotVersion = "1.4.1"
+	BotVersion = "20w14∞"
 }

@@ -51,6 +51,7 @@ func CommandNekoExec(s *discordgo.Session, m *discordgo.Message, args ...string)
 	embed.SetTitle("🐱 Neko 🐱")
 	embed.SetAuthor(m.Author.AvatarURL("1024"), m.Author.Username)
 	embed.SetImage(img)
-	s.ChannelMessageSendEmbed(m.ChannelID, embed.MessageEmbed)
-
+	sent, _ := s.ChannelMessageSendEmbed(m.ChannelID, embed.MessageEmbed)
+	lastCommandOutputMsgChannelID = sent.ChannelID
+	lastCommandOutputMsgID = sent.ID
 }

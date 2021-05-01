@@ -14,6 +14,12 @@ import (
 func CommandCalcExec(s *discordgo.Session, m *discordgo.Message, args ...string) {
 	expr := strings.TrimSpace(strings.Join(args, " "))
 
+	if len(expr) < 1 {
+		customHelpMsg = "❌ ***Parâmetros incorretos! Quer __;ajuda__?***"
+		CommandAjudaExec(s, m)
+		return
+	}
+
 	responseBody, err := utils.GetDoc("https://api.mathjs.org/v4/?expr=" + url.QueryEscape(expr))
 
 	if err != nil {
@@ -36,8 +42,11 @@ func CommandCalcExec(s *discordgo.Session, m *discordgo.Message, args ...string)
 	e := utils.NewEmbed()
 
 	e.SetTitle(title)
-	e.SetColor(0x36393F)
+	e.SetColor(0x2F3136)
 	e.SetDescription(result)
 
-	s.ChannelMessageSendEmbed(m.ChannelID, e.MessageEmbed)
+	sent, _ := s.ChannelMessageSendEmbed(m.ChannelID, e.MessageEmbed)
+
+	lastCommandOutputMsgChannelID = sent.ChannelID
+	lastCommandOutputMsgID = sent.ID
 }
