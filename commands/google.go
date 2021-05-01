@@ -20,17 +20,6 @@ var last_msg_author_id string         // lembrar quem que pesquisou anteriorment
 var last_google_msg_id string         // lembrar qual foi a mensagem que contém os resultados
 var last_google_command_msg_id string // lembrar qual a mensagem que contém o comando ";g" e seus argumentos
 
-// EventGoogleMessageEdit é executado quando uma mensagem com ;g for editada por seu autor
-func EventGoogleMessageEdit(s *discordgo.Session, usrMsg *discordgo.Message) {
-	if usrMsg.ID != last_google_command_msg_id {
-		// não executar se a mensagem editada não for a que tem o ;g
-		return
-	}
-
-	s.ChannelMessageDelete(usrMsg.ChannelID, last_google_msg_id) // apagar a mensagem anterior após re-executar o comando
-	HandleCommand(s, usrMsg)
-}
-
 // EventGoogleMessageReaction é executado quando há uma reação na mensagem do comando de Google.
 func EventGoogleMessageReaction(s *discordgo.Session, botMessage *discordgo.Message, r *discordgo.MessageReaction) {
 	if r.UserID != last_msg_author_id {
@@ -118,6 +107,9 @@ func CommandGoogleExec(s *discordgo.Session, m *discordgo.Message, args ...strin
 			last_google_msg_id = sent_msg.ID
 			last_google_command_msg_id = m.ID
 
+			lastCommandOutputMsgChannelID = sent_msg.ChannelID
+			lastCommandOutputMsgID = sent_msg.ID
+
 			// adicionar reacts na mensagem
 			s.MessageReactionAdd(m.ChannelID, sent_msg.ID, "◀️")
 			s.MessageReactionAdd(m.ChannelID, sent_msg.ID, "▶️")
@@ -126,12 +118,11 @@ func CommandGoogleExec(s *discordgo.Session, m *discordgo.Message, args ...strin
 			msg.SetColor(utils.Yellow)
 			msg.SetTitle("Erro")
 			msg.SetDescription("Nenhum resultado encontrado")
-			s.ChannelMessageSendEmbed(m.ChannelID, msg.MessageEmbed)
+			sent, _ := s.ChannelMessageSendEmbed(m.ChannelID, msg.MessageEmbed)
+			lastCommandOutputMsgChannelID = sent.ChannelID
+			lastCommandOutputMsgID = sent.ID
 		}
 
 	}
-
-	return
-
 	//fmt.Println(teste[1].Link)
 }

@@ -23,6 +23,11 @@ var Commands = make(map[string]Command)
 // Aliases representa o registro de aliases, apontando uma alias para o nome real do comando
 var Aliases = make(map[string]string)
 
+var lastCommandInputMsgID string // mensagem enviada PARA o bot (executada pelo usuário)
+var lastCommandInputMsgChannelID string
+var lastCommandOutputMsgID string // mensagem enviada DO bot (em resposta a um comando)
+var lastCommandOutputMsgChannelID string
+
 // RegisterCommands faz o registro de comandos. Deve ser executado pelo menos uma vez na inicialização do bot
 func RegisterCommands() {
 	// função utilitária de registro
@@ -86,6 +91,14 @@ func RegisterCommands() {
 	})
 
 	register(Command{
+		name:        "traduzir",
+		description: "Traduzir",
+		usage:       "t <ling. destino> <texto>",
+		aliases:     []string{"t", "translate"},
+		exec:        CommandTranslateExec,
+	})
+
+	register(Command{
 		name:        "ping",
 		description: "🏓",
 		usage:       "ping",
@@ -124,5 +137,27 @@ func HandleCommand(s *discordgo.Session, m *discordgo.Message) {
 
 		// executar :)
 		cmd.exec(s, m, args...)
+	}
+
+	lastCommandInputMsgChannelID = m.ChannelID
+	lastCommandInputMsgID = m.ID
+}
+
+// HandleCommandEdit lida com as mensagens que são editadas - se o ID da mensagem for igual ao comando executado anteriormente, ele é re-executado
+func HandleCommandEdit(s *discordgo.Session, m *discordgo.Message) {
+	if m.ID == lastCommandInputMsgID {
+		// delete old output message
+		s.ChannelMessageDelete(lastCommandOutputMsgChannelID, lastCommandOutputMsgID)
+	}
+
+	// re-execute command
+	HandleCommand(s, m)
+}
+
+// HandleCommandDelete lida com as mensagens que são apagadas - se o ID da mensagem for igual ao comando executado anteriormente, ele é apagado
+func HandleCommandDelete(s *discordgo.Session, mID string) {
+	if mID == lastCommandInputMsgID {
+		// delete old output message
+		s.ChannelMessageDelete(lastCommandOutputMsgChannelID, lastCommandOutputMsgID)
 	}
 }

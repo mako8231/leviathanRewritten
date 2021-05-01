@@ -36,5 +36,7 @@ func CommandAvatarExec(s *discordgo.Session, m *discordgo.Message, args ...strin
 	e.SetImage(user.AvatarURL("1024"))
 	e.SetFooter("ID " + user.ID)
 
-	s.ChannelMessageSendEmbed(m.ChannelID, e.MessageEmbed)
+	sent, _ := s.ChannelMessageSendEmbed(m.ChannelID, e.MessageEmbed)
+	lastCommandOutputMsgChannelID = sent.ChannelID
+	lastCommandOutputMsgID = sent.ID
 }

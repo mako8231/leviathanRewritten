@@ -25,6 +25,8 @@ func CommandDiceExec(s *discordgo.Session, m *discordgo.Message, args ...string)
 	msg := utils.NewEmbed()
 	msg.SetAuthor(m.Author.AvatarURL("1024"), m.Author.Username)
 	msg.SetDescription(strconv.Itoa(dice))
-	s.ChannelMessageSendEmbed(m.ChannelID, msg.MessageEmbed)
+	sent, _ := s.ChannelMessageSendEmbed(m.ChannelID, msg.MessageEmbed)
+	lastCommandOutputMsgChannelID = sent.ChannelID
+	lastCommandOutputMsgID = sent.ID
 	return
 }

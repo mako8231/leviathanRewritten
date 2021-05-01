@@ -5,12 +5,10 @@ import (
 	"net/http"
 )
 
-
-
-func GetDoc(url string)([]byte, error){
+func GetDoc(url string) ([]byte, error) {
 	//Get response
 	resp, err := http.Get(url)
-	if err != nil{
+	if err != nil {
 		return nil, err
 	}
 
@@ -18,26 +16,25 @@ func GetDoc(url string)([]byte, error){
 
 	//Read all body
 	b, err := ioutil.ReadAll(resp.Body)
-	if err != nil{
-		return nil, err 
+	if err != nil {
+		return nil, err
 	}
 
-	
-	return b, nil 
+	return b, nil
 }
 
-func GetResponse(url string)(*http.Response, error){
-	
+func GetResponse(url string) (*http.Response, error) {
+
 	baseClient := &http.Client{}
 	req, _ := http.NewRequest("GET", url, nil)
 	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36")
 
 	res, err := baseClient.Do(req)
 
-	if err != nil{
-		return nil, err 
+	if err != nil {
+		return nil, err
 	} else {
-		return res, nil 
+		return res, nil
 	}
 
 }
