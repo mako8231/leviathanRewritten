@@ -132,8 +132,8 @@ func HandleCommand(s *discordgo.Session, m *discordgo.Message) {
 
 	// verificar se o comando existe
 	if cmd, exists := Commands[cmdName]; exists {
-		// começar a digitar no canal...
-		s.ChannelTyping(m.ChannelID)
+		// começar a digitar no canal (paralelamente ao comando)
+		go func() { s.ChannelTyping(m.ChannelID) }()
 
 		// executar :)
 		cmd.exec(s, m, args...)
@@ -146,8 +146,8 @@ func HandleCommand(s *discordgo.Session, m *discordgo.Message) {
 // HandleCommandEdit lida com as mensagens que são editadas - se o ID da mensagem for igual ao comando executado anteriormente, ele é re-executado
 func HandleCommandEdit(s *discordgo.Session, m *discordgo.Message) {
 	if m.ID == lastCommandInputMsgID {
-		// delete old output message
-		s.ChannelMessageDelete(lastCommandOutputMsgChannelID, lastCommandOutputMsgID)
+		// delete old output message (paralelamente ao novo comando)
+		go func() { s.ChannelMessageDelete(lastCommandOutputMsgChannelID, lastCommandOutputMsgID) }()
 	}
 
 	// re-execute command

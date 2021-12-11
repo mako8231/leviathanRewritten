@@ -21,24 +21,22 @@ var last_google_msg_id string         // lembrar qual foi a mensagem que contém
 var last_google_command_msg_id string // lembrar qual a mensagem que contém o comando ";g" e seus argumentos
 
 // EventGoogleMessageReaction é executado quando há uma reação na mensagem do comando de Google.
-func EventGoogleMessageReaction(s *discordgo.Session, botMessage *discordgo.Message, r *discordgo.MessageReaction) {
+func EventGoogleMessageReaction(s *discordgo.Session, r *discordgo.MessageReaction) {
 	if r.UserID != last_msg_author_id {
 		// não executar se quem reagiu é não for quem executou ;g
 		return
 	}
 
-	if botMessage.ID != last_google_msg_id {
+	if r.MessageID != last_google_msg_id {
 		// não executar se essa não for a pesquisa mais recente
 		return
 	}
 
 	// remover react da pessoa para que ela possa reagir novamente
-	err := s.MessageReactionRemove(botMessage.ChannelID, botMessage.ID, r.Emoji.Name, r.UserID)
-
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
+	// go func: executar em paralelo ao resto da EventGoogleMessageReaction
+	go func() {
+		s.MessageReactionRemove(r.ChannelID, r.MessageID, r.Emoji.Name, r.UserID)
+	}()
 
 	if r.Emoji.Name == "◀️" && results_index > 0 {
 		results_index = results_index - 1
@@ -56,7 +54,7 @@ func EventGoogleMessageReaction(s *discordgo.Session, botMessage *discordgo.Mess
 		final = final + " (Bing)"
 	}
 
-	s.ChannelMessageEdit(botMessage.ChannelID, botMessage.ID, final)
+	s.ChannelMessageEdit(r.ChannelID, r.MessageID, final)
 }
 
 func CommandGoogleExec(s *discordgo.Session, m *discordgo.Message, args ...string) {
