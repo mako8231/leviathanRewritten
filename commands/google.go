@@ -33,12 +33,10 @@ func EventGoogleMessageReaction(s *discordgo.Session, r *discordgo.MessageReacti
 	}
 
 	// remover react da pessoa para que ela possa reagir novamente
-	err := s.MessageReactionRemove(r.ChannelID, r.MessageID, r.Emoji.Name, r.UserID)
-
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
+	// go func: executar em paralelo ao resto da EventGoogleMessageReaction
+	go func() {
+		s.MessageReactionRemove(r.ChannelID, r.MessageID, r.Emoji.Name, r.UserID)
+	}()
 
 	if r.Emoji.Name == "◀️" && results_index > 0 {
 		results_index = results_index - 1
