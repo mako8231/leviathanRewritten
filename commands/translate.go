@@ -51,7 +51,6 @@ func CommandTranslateExec(s *discordgo.Session, m *discordgo.Message, args ...st
 		e := utils.NewEmbed()
 		e.SetColor(0x2F3136)
 		e.SetDescription(utils.StringLimitChar(translated, 999))
-		e.SetFooter(utils.StringLimitChar(text, 20))
 		sent, _ := s.ChannelMessageSendEmbed(m.ChannelID, e.MessageEmbed)
 
 		lastCommandOutputMsgChannelID = sent.ChannelID

@@ -7,7 +7,7 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-func MessageReactionAdd(s *discordgo.Session, reaction *discordgo.MessageReactionAdd) {
+func MessageReactionRemove(s *discordgo.Session, reaction *discordgo.MessageReactionRemove) {
 	commands.EventGoogleMessageReaction(s, reaction.MessageReaction)
-	fmt.Println("React adicionado", reaction.Emoji.Name)
+	fmt.Println("React removido", reaction.Emoji.Name)
 }
