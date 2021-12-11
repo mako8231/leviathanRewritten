@@ -38,6 +38,7 @@ func StartClient() {
 
 	Session.AddHandler(handlers.MessageCreate)
 	Session.AddHandler(handlers.MessageReactionAdd)
+	Session.AddHandler(handlers.MessageReactionRemove)
 	Session.AddHandler(handlers.MessageEdit)
 	Session.AddHandler(handlers.MessageDelete)
 
