@@ -11,7 +11,7 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-type translateResult [][]string
+type translateOutput [][][]string
 
 // CommandTranslateExec representa o comando de tradução
 func CommandTranslateExec(s *discordgo.Session, m *discordgo.Message, args ...string) {
@@ -38,12 +38,17 @@ func CommandTranslateExec(s *discordgo.Session, m *discordgo.Message, args ...st
 		return
 	}
 
-	var result []translateResult
-	json.Unmarshal(responseBody, &result)
-	translated := result[0][0][0]
+	var output translateOutput
+	var translated string = ""
+	json.Unmarshal(responseBody, &output)
+
+	// Essa API adora mostrar os resultados em vetor 4D. Muito bonito!
+	for i := range output[0] {
+		translated = translated + output[0][i][0]
+	}
 
 	if len(translated) < 1 {
-		sent, _ := s.ChannelMessageSend(m.ChannelID, "❌ ***Tradução somehow nula — pode ter sido parâmetros incorretos***")
+		sent, _ := s.ChannelMessageSend(m.ChannelID, "❌ ***Tradução nula — pode ter sido parâmetros incorretos, ou a API mudou***")
 
 		lastCommandOutputMsgChannelID = sent.ChannelID
 		lastCommandOutputMsgID = sent.ID
